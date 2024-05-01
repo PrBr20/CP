@@ -1,4 +1,0 @@
-1. ctrl + shift + v -> paste in correct format
-2. ctrl + l -> select an entire line
-3. ctrl + shift + m -> select entire things within a parathenses
-4. ctrl + x -> delete a line
