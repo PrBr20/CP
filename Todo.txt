@@ -1,2 +1,0 @@
-1. SparseTable 
-	- can compute range min/max queries in O(1) time
