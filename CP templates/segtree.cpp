@@ -1,43 +1,49 @@
-#define MAX 200005
+#include<bits/stdc++.h>
+using namespace std;
 
-//********* build(a, 1, 0, n-1) ********************
-//********* sum(1, 0, n-1, l, r) ********************
-//********* update(1, 0, n-1, pos, val) ********************
-//********* minimum finding e l>r e INT_MAX *********************
+const int N = 3e5 + 9;
 
-int ta[4*MAX];
-
-void build(int a[], int v, int tl, int tr) {
-    if (tl == tr) {
-        ta[v] = a[tl];
-    } else {
-        int tm = (tl + tr) / 2;
-        build(a, v*2, tl, tm);
-        build(a, v*2+1, tm+1, tr);
-        ta[v] = ta[v*2] + ta[v*2+1];
+int a[N];
+struct ST {
+  int t[4 * N];
+  static const int inf = 1e9;
+  ST() {
+    memset(t, 0, sizeof t);
+  }
+  void build(int n, int b, int e) {
+    if (b == e) {
+      t[n] = a[b];
+      return;
     }
-}
-
-int sum(int v, int tl, int tr, int l, int r) {
-    if (l > r) 
-        return 0;
-    if (l == tl && r == tr) {
-        return ta[v];
+    int mid = (b + e) >> 1, l = n << 1, r = l | 1;
+    build(l, b, mid);
+    build(r, mid + 1, e);
+    t[n] = max(t[l], t[r]);
+  }
+  void upd(int n, int b, int e, int i, int x) {
+    if (b > i || e < i) return;
+    if (b == e && b == i) {
+      t[n] = x;
+      return;
     }
-    int tm = (tl + tr) / 2;
-    return sum(v*2, tl, tm, l, min(r, tm))
-           + sum(v*2+1, tm+1, tr, max(l, tm+1), r);
-}
+    int mid = (b + e) >> 1, l = n << 1, r = l | 1;
+    upd(l, b, mid, i, x);
+    upd(r, mid + 1, e, i, x);
+    t[n] = max(t[l], t[r]);
+  }
+  int query(int n, int b, int e, int i, int j) {
+    if (b > j || e < i) return -inf;
+    if (b >= i && e <= j) return t[n];
+    int mid = (b + e) >> 1, l = n << 1, r = l | 1;
+    int L = query(l, b, mid, i, j);
+    int R = query(r, mid + 1, e, i, j);
+    return max(L, R);
+  }
+};
 
-void update(int v, int tl, int tr, int pos, int new_val) {
-    if (tl == tr) {
-        ta[v] = new_val;
-    } else {
-        int tm = (tl + tr) / 2;
-        if (pos <= tm)
-            update(v*2, tl, tm, pos, new_val);
-        else
-            update(v*2+1, tm+1, tr, pos, new_val);
-        ta[v] = ta[v*2] + ta[v*2+1];
-    }
+int32_t main() {
+  ios_base::sync_with_stdio(0);
+  cin.tie(0);
+  
+  return 0;
 }

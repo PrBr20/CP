@@ -20,39 +20,14 @@ void printarr(int a[], int n) {
   for(int i=0;i<n;i++) cout<<a[i]<<" ";
 }
 
-void printvec(vector<int>& v) {
-  for(int i=0;i<v.size();i++) cout<<v[i]<<" ";
-  cout<<endl;
-}
- 
 #define MAX 200005
 
 int a[MAX], dp[MAX][2];
 
-int main() {  
-    int t;
-    cin>>t;
-    while(t--){
-      int n, w, f;
-      cin>>n>>w>>f;
-      
-      for(int i=1;i<=n;i++) cin>>a[i];
-      
-      for(int i=0;i<=n;i++) {
-        for(int j=0;j<2;j++) dp[i][j] = INT_MAX;
-      }  
-    
-      dp[0][0]=0;
-      dp[1][0]=0;
-      
-      for(int i=1; i<=n;i++){
-        for(int j=0;j<2;j++){
-          int remw = min(dp[i-1][0], dp[i-1][1])*w;
-          
-        }  
-      }
-      
-      
-    }
- 
+int main() {
+  set<int> s;
+  s.insert({2,3,4,3,5});
+  cout<<s.size()<<endl;
+  s.erase(6);
+  cout<<s.size()<<endl;
 }
