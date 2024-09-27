@@ -1,0 +1,2 @@
+1. Approx. no of primes upto N -> N/ln(N)
+2. Approx. no of divisors upto N -> N^(1/3)

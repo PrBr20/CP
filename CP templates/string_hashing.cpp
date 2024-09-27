@@ -1,34 +1,73 @@
-ll hsh[MAX], pwi[MAX];
+const int N=1e6+9, M=998244353;
 
-ll bigmod(ll a, ll b)
-{
-    ll ans=1;
-    while(b)
-    {
-        if(b&1) ans=(ans*a)%MOD;
-        a=(a*a)%MOD;
-        b/=2;
-    }
-    return ans;
-}
-
-
-void calc_hash(string s) {
-  int n=s.size();
-  hsh[1]=s[0]-'a'+1;
-  ll b=1ll;
-  pwi[1]=b;
-  for(int i=2;i<=n;i++){
-    b = (b*31)%MOD;
-    pwi[i]=bigmod(b, MOD-2);
-    hsh[i] = (hsh[i-1] + b*(s[i-1]-'a'+1))%MOD;
+int power(long long n, long long k, const int mod) {
+  int ans = 1 % mod;
+  n %= mod;
+  if (n < 0) n += mod;
+  while (k) {
+    if (k & 1) ans = (long long) ans * n % mod;
+    n = (long long) n * n % mod;
+    k >>= 1;
   }
-  
-  // string s = "ddabababb";
-    // calc_hash(s);
-    // ll val1 = (hsh[5] - hsh[2] + MOD)%MOD, val2 = (hsh[7] - hsh[4] + MOD)%MOD;
-    // val1 = (val1 * pwi[1])%MOD;
-    // val2 = (val2 * pwi[3])%MOD;
-    // cout<<val1<<" "<<val2<<endl;
-  
+  return ans;
 }
+
+struct hash_pair {
+    template <class T1, class T2>
+    size_t operator() (const pair<T1, T2> &p) const {
+        auto hash1 = hash<T1>{}(p.first);
+        auto hash2 = hash<T2>{}(p.second);
+        return hash1 ^ hash2;
+    }
+};
+
+
+const int MOD1 = 127657753, MOD2 = 987654319;
+const int p1 = 31, p2 = 277;
+int ip1, ip2;
+pair<int, int> pw[N], ipw[N];
+void prec() {
+  pw[0] =  {1, 1};
+  for (int i = 1; i < N; i++) {
+    pw[i].first = 1LL * pw[i - 1].first * p1 % MOD1;
+    pw[i].second = 1LL * pw[i - 1].second * p2 % MOD2;
+  }
+  ip1 = power(p1, MOD1 - 2, MOD1);
+  ip2 = power(p2, MOD2 - 2, MOD2);
+  ipw[0] =  {1, 1};
+  for (int i = 1; i < N; i++) {
+    ipw[i].first = 1LL * ipw[i - 1].first * ip1 % MOD1;
+    ipw[i].second = 1LL * ipw[i - 1].second * ip2 % MOD2;
+  }
+
+}
+struct Hashing {
+  int n;
+  string s; // 0 - indexed
+  vector<pair<int, int>> hs; // 1 - indexed
+  Hashing() {}
+  Hashing(string _s) {
+    n = _s.size();
+    s = _s;
+    hs.emplace_back(0, 0);
+    for (int i = 0; i < n; i++) {
+      pair<int, int> p;
+      p.first = (hs[i].first + 1LL * pw[i].first * s[i] % MOD1) % MOD1;
+      p.second = (hs[i].second + 1LL * pw[i].second * s[i] % MOD2) % MOD2;
+      hs.push_back(p);
+    }
+  }
+  pair<int, int> get_hash(int l, int r) { // 1 - indexed
+    assert(1 <= l && l <= r && r <= n);
+    pair<int, int> ans;
+    ans.first = (hs[r].first - hs[l - 1].first + MOD1) * 1LL * ipw[l - 1].first % MOD1;
+    ans.second = (hs[r].second - hs[l - 1].second + MOD2) * 1LL * ipw[l - 1].second % MOD2;
+    return ans;
+  }
+  pair<int, int> get_hash() {
+    return get_hash(1, n);
+  }
+  vector<pair<int,int>> get_hash_arr() {
+    return hs;
+  }
+};
