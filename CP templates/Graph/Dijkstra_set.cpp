@@ -7,6 +7,7 @@ void dijkstra(int s, vector<int> & d, vector<int> & p) {
     int n = adj.size();
     d.assign(n, INF);
     p.assign(n, -1);
+    vector<bool> u(n, false);
 
     d[s] = 0;
     set<pair<int, int>> q;
@@ -14,10 +15,12 @@ void dijkstra(int s, vector<int> & d, vector<int> & p) {
     while (!q.empty()) {
         int v = q.begin()->second;
         q.erase(q.begin());
+        u[v] = true;
 
         for (auto edge : adj[v]) {
             int to = edge.first;
             int len = edge.second;
+            if(u[to]) continue;
 
             if (d[v] + len < d[to]) {
                 q.erase({d[to], to});

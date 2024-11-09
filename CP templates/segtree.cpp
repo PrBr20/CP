@@ -41,9 +41,19 @@ struct ST {
   }
 };
 
+ST sg;
+
 int32_t main() {
   ios_base::sync_with_stdio(0);
   cin.tie(0);
+  
+  
+  int n=5;
+  for(int i=0;i<n;i++) a[i]=i+1;
+    
+  sg.build(n,0,n-1);
+
+  cout<<sg.query(n, 0, n-1, 1, 2)<<endl;
   
   return 0;
 }
